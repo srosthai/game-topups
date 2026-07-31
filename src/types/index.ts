@@ -19,6 +19,7 @@ export interface TopupPackage {
   id: string;
   amount: string;
   price: string;
+  image?: string;
   bonus?: string;
 }
 

@@ -4,13 +4,30 @@ import { Button } from '../ui/Button';
 import { Game } from '../../types';
 import { DEFAULT_GAME_IMAGE } from '../../data/games';
 import { PlayerIdGuideModal } from '../common/PlayerIdGuideModal';
-import { Gamepad2, Sparkles, Check, CreditCard, ShieldCheck, Zap, HelpCircle, Info, CheckCircle2 } from 'lucide-react';
+import { Gamepad2, Check, CreditCard, ShieldCheck, Zap, HelpCircle, Info, CheckCircle2 } from 'lucide-react';
 
 interface TopupModalProps {
   game: Game | null;
   isOpen: boolean;
   onClose: () => void;
 }
+
+const getPackageImage = (amount: string) => {
+  const a = amount.toLowerCase();
+  if (/pass|membership|welkin|blessing|booster|weekly/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/ticket.png';
+  }
+  if (/bundle|pack|plan/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/gift.png';
+  }
+  if (/\buc\b|cp\b|token|voucher|robux|core|coin|point|diamond|gem|crystal|shard|monochrome|oneiric|essence|rub(y|ies)/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/diamond-ring.png';
+  }
+  if (/cash|pay|fee|bonus/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/cash.png';
+  }
+  return 'https://img.icons8.com/fluency/96/coins.png';
+};
 
 export const TopupModal: React.FC<TopupModalProps> = ({ game, isOpen, onClose }) => {
   const [userId, setUserId] = useState('');
@@ -23,10 +40,10 @@ export const TopupModal: React.FC<TopupModalProps> = ({ game, isOpen, onClose })
   if (!game) return null;
 
   const packages = game.topupPackages || [
-    { id: 'p-1', amount: '100 Gems', price: '$0.99', bonus: '+10 Free' },
-    { id: 'p-2', amount: '300 Gems', price: '$2.99', bonus: '+35 Free' },
-    { id: 'p-3', amount: '1000 Gems', price: '$9.99', bonus: '+150 Free' },
-    { id: 'p-4', amount: '2500 Gems', price: '$24.99', bonus: '+400 Free' },
+    { id: 'p-1', amount: '100 Gems', price: '$0.99', bonus: '+10 Free', image: getPackageImage('100 Gems') },
+    { id: 'p-2', amount: '300 Gems', price: '$2.99', bonus: '+35 Free', image: getPackageImage('300 Gems') },
+    { id: 'p-3', amount: '1000 Gems', price: '$9.99', bonus: '+150 Free', image: getPackageImage('1000 Gems') },
+    { id: 'p-4', amount: '2500 Gems', price: '$24.99', bonus: '+400 Free', image: getPackageImage('2500 Gems') },
   ];
 
   const selectedPkg = packages.find((p) => p.id === selectedPackageId) || packages[0];
@@ -158,7 +175,20 @@ export const TopupModal: React.FC<TopupModalProps> = ({ game, isOpen, onClose })
                     }`}
                   >
                     <div className="flex justify-between items-start">
-                      <span className="text-sm font-extrabold text-[#1D1D1D]">{pkg.amount}</span>
+                      <div className="my-1.5 space-y-1">
+                        <div className="w-10 h-10 mx-auto rounded-xl bg-[#E2EFE0] border border-[#1D1D1D] flex items-center justify-center overflow-hidden shadow-[1px_1px_0px_#1D1D1D]">
+                          <img
+                            src={pkg.image || getPackageImage(pkg.amount)}
+                            alt={`${pkg.amount} package`}
+                            className="w-6 h-6 object-contain"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
+                        <span className="text-sm font-extrabold text-[#1D1D1D]">{pkg.amount}</span>
+                      </div>
                       {pkg.bonus && (
                         <span className="text-[10px] font-black px-1.5 py-0.5 rounded bg-[#E2EFE0] border border-[#1D1D1D]">
                           {pkg.bonus}

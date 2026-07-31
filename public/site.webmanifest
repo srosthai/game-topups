@@ -1,0 +1,21 @@
+{
+  "name": "TopUp Gems — Instant Game Top-Up Store",
+  "short_name": "TopUp Gems",
+  "description": "Instant game top-up in Cambodia. Mobile Legends, PUBG, Free Fire & more with KHQR, ABA and Wing payments.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8F7F3",
+  "theme_color": "#A8C88A",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

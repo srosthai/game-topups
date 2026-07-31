@@ -41,7 +41,7 @@ export const GameSection: React.FC<GameSectionProps> = ({
 
   return (
     <section className={`w-full ${className || ''}`}>
-      <div className="sticky top-[78px] z-20 bg-transparent px-1 pb-3 border-b border-[#1D1D1D]/10 dark:border-zinc-700/60 mb-4 -mx-1 sm:mx-0">
+      <div className="lg:sticky lg:top-[78px] z-20 bg-transparent px-1 pb-3 border-b border-[#1D1D1D]/10 dark:border-zinc-700/60 mb-4 -mx-1 sm:mx-0">
         <div className="space-y-4">
           {/* Section Header with Controls */}
           <SectionTitle

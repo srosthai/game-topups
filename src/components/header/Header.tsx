@@ -49,31 +49,15 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Language Switcher + Theme Toggle */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Language Switcher EN / KM */}
-          <div className="flex items-center bg-white dark:bg-[#121318] border-1.5 border-[#1D1D1D] dark:border-zinc-700 rounded-xl p-1 shadow-[2px_2px_0px_#1D1D1D] dark:shadow-[2px_2px_0px_#000]">
-            <button
-              onClick={() => onToggleLanguage?.('EN')}
-              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                language === 'EN'
-                  ? 'bg-[#A8C88A] text-[#1D1D1D] shadow-sm'
-                  : 'text-[#1D1D1D]/70 dark:text-zinc-300 hover:text-[#1D1D1D] dark:hover:text-white'
-              }`}
-            >
-              <span>🇬🇧</span>
-              <span>EN</span>
-            </button>
-            <button
-              onClick={() => onToggleLanguage?.('KM')}
-              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 text-xs font-black rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                language === 'KM'
-                  ? 'bg-[#A8C88A] text-[#1D1D1D] shadow-sm'
-                  : 'text-[#1D1D1D]/70 dark:text-zinc-300 hover:text-[#1D1D1D] dark:hover:text-white'
-              }`}
-            >
-              <span>🇰🇭</span>
-              <span>KM</span>
-            </button>
-          </div>
+          {/* Language Toggle EN <-> KM */}
+          <button
+            onClick={() => onToggleLanguage?.(language === 'EN' ? 'KM' : 'EN')}
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-black rounded-xl bg-white dark:bg-[#121318] border-1.5 border-[#1D1D1D] dark:border-zinc-700 text-[#1D1D1D] dark:text-white shadow-[2px_2px_0px_#1D1D1D] dark:shadow-[2px_2px_0px_#000] hover:bg-[#E2EFE0] dark:hover:bg-[#1E2B22] active:translate-y-0.5 transition-all cursor-pointer"
+            title={language === 'EN' ? 'ប្តូរទៅភាសាខ្មែរ' : 'Switch to English'}
+          >
+            <span>{language === 'EN' ? '🇬🇧' : '🇰🇭'}</span>
+            <span>{language}</span>
+          </button>
 
           {/* Theme Toggle Button */}
           {onToggleDarkMode && (

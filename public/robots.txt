@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://topup-games.srosthai.me/sitemap.xml

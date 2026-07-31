@@ -8,6 +8,9 @@ import {
   ShieldCheck,
   Zap,
   Sparkles,
+  Gem,
+  Coins,
+  Ticket,
   CreditCard,
   QrCode,
   Building2,
@@ -30,6 +33,42 @@ interface TopupGamePageProps {
   onBack: () => void;
 }
 
+// Currency-aware package visual: icon + color derived from the amount label,
+// so each game's packages show its own currency style without external images.
+const getPackageVisual = (amount: string) => {
+  const a = amount.toLowerCase();
+  if (/pass|membership|welkin|blessing/.test(a))
+    return { Icon: Ticket, color: 'text-purple-500 dark:text-purple-400' };
+  if (/diamond/.test(a))
+    return { Icon: Gem, color: 'text-sky-500 dark:text-sky-400' };
+  if (/rub(y|ies)/.test(a))
+    return { Icon: Gem, color: 'text-red-500 dark:text-red-400' };
+  if (/crystal|shard|monochrome|oneiric/.test(a))
+    return { Icon: Gem, color: 'text-indigo-500 dark:text-indigo-400' };
+  if (/gem|essence/.test(a))
+    return { Icon: Gem, color: 'text-emerald-500 dark:text-emerald-400' };
+  if (/\buc\b|\bcp\b|token|voucher|robux|core|coin|point/.test(a))
+    return { Icon: Coins, color: 'text-amber-500 dark:text-amber-400' };
+  return { Icon: Sparkles, color: 'text-amber-500 dark:text-amber-400' };
+};
+
+const getPackageImage = (amount: string) => {
+  const a = amount.toLowerCase();
+  if (/pass|membership|welkin|blessing|booster|weekly/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/ticket.png';
+  }
+  if (/bundle|pack|plan/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/gift.png';
+  }
+  if (/\buc\b|cp\b|token|voucher|robux|core|coin|point|diamond|gem|crystal|shard|monochrome|oneiric|essence|rub(y|ies)/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/diamond-ring.png';
+  }
+  if (/cash|pay|fee|bonus/.test(a)) {
+    return 'https://img.icons8.com/fluency/96/cash.png';
+  }
+  return 'https://img.icons8.com/fluency/96/coins.png';
+};
+
 export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) => {
   // Step 1: User Account State
   const [userId, setUserId] = useState('');
@@ -44,16 +83,16 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
 
   // Topup Packages
   const defaultPackages: TopupPackage[] = [
-    { id: 'p-1', amount: 'Weekly Diamond Pass', price: '$1.52', bonus: 'Weekly Pass' },
-    { id: 'p-2', amount: '55 Diamonds', price: '$0.92', bonus: '+5 Free' },
-    { id: 'p-3', amount: '86 Diamonds', price: '$1.30', bonus: '+8 Free' },
-    { id: 'p-4', amount: '172 Diamonds', price: '$2.59', bonus: '+16 Free' },
-    { id: 'p-5', amount: '257 Diamonds', price: '$3.59', bonus: '+25 Free' },
-    { id: 'p-6', amount: '429 Diamonds', price: '$5.99', bonus: '+43 Free' },
-    { id: 'p-7', amount: '514 Diamonds', price: '$6.99', bonus: '+52 Free' },
-    { id: 'p-8', amount: '600 Diamonds', price: '$7.99', bonus: 'Popular' },
-    { id: 'p-9', amount: '706 Diamonds', price: '$9.49', bonus: '+70 Free' },
-    { id: 'p-10', amount: '792 Diamonds', price: '$10.69', bonus: 'Best Value' },
+    { id: 'p-1', amount: 'Weekly Diamond Pass', price: '$1.52', bonus: 'Weekly Pass', image: getPackageImage('Weekly Diamond Pass') },
+    { id: 'p-2', amount: '55 Diamonds', price: '$0.92', bonus: '+5 Free', image: getPackageImage('55 Diamonds') },
+    { id: 'p-3', amount: '86 Diamonds', price: '$1.30', bonus: '+8 Free', image: getPackageImage('86 Diamonds') },
+    { id: 'p-4', amount: '172 Diamonds', price: '$2.59', bonus: '+16 Free', image: getPackageImage('172 Diamonds') },
+    { id: 'p-5', amount: '257 Diamonds', price: '$3.59', bonus: '+25 Free', image: getPackageImage('257 Diamonds') },
+    { id: 'p-6', amount: '429 Diamonds', price: '$5.99', bonus: '+43 Free', image: getPackageImage('429 Diamonds') },
+    { id: 'p-7', amount: '514 Diamonds', price: '$6.99', bonus: '+52 Free', image: getPackageImage('514 Diamonds') },
+    { id: 'p-8', amount: '600 Diamonds', price: '$7.99', bonus: 'Popular', image: getPackageImage('600 Diamonds') },
+    { id: 'p-9', amount: '706 Diamonds', price: '$9.49', bonus: '+70 Free', image: getPackageImage('706 Diamonds') },
+    { id: 'p-10', amount: '792 Diamonds', price: '$10.69', bonus: 'Best Value', image: getPackageImage('792 Diamonds') },
   ];
 
   const packages = game.topupPackages && game.topupPackages.length > 0
@@ -69,8 +108,7 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
       id: 'aba_khqr',
       name: 'ABA KHQR / Pay',
       badge: '0% Fee',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/ABA_Bank_logo.png/600px-ABA_Bank_logo.png',
-      fallbackLogo: 'https://upload.wikimedia.org/wikipedia/commons/2/22/ABA_Bank_logo.png',
+      logo: '/payments/aba.svg',
       description: 'Scan with ABA Mobile or any KHQR Bank App',
       bgTag: 'bg-red-500/10 text-red-600 dark:text-red-400',
     },
@@ -243,8 +281,8 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
             </div>
 
             <form onSubmit={handleVerifyAccount} className="space-y-3 pt-1">
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                <div className="sm:col-span-7">
+              <div className="grid grid-cols-12 gap-2.5 sm:gap-3">
+                <div className="col-span-7">
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-xs font-extrabold text-[#1D1D1D] dark:text-zinc-200">
                       User ID / Player ID <span className="text-red-500">*</span>
@@ -260,30 +298,36 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
                   </div>
                   <input
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
                     required
                     value={userId}
                     onChange={(e) => {
-                      setUserId(e.target.value);
+                      setUserId(e.target.value.replace(/\D/g, ''));
                       setVerifiedAccount(null);
                     }}
                     placeholder="e.g. 123456789"
-                    className="w-full px-3.5 py-2.5 text-sm font-mono font-bold bg-white dark:bg-[#121318] text-[#1D1D1D] dark:text-white border-2 border-[#1D1D1D] dark:border-zinc-700 rounded-xl shadow-[2px_2px_0px_#1D1D1D] dark:shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-[#A8C88A]"
+                    className="w-full px-3.5 py-2.5 text-base sm:text-sm font-mono font-bold bg-white dark:bg-[#121318] text-[#1D1D1D] dark:text-white border-2 border-[#1D1D1D] dark:border-zinc-700 rounded-xl shadow-[2px_2px_0px_#1D1D1D] dark:shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-[#A8C88A]"
                   />
                 </div>
 
-                <div className="sm:col-span-5">
+                <div className="col-span-5">
                   <label className="block text-xs font-extrabold text-[#1D1D1D] dark:text-zinc-200 mb-1">
                     Server ID / Zone ID
                   </label>
                   <input
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
                     value={serverId}
                     onChange={(e) => {
-                      setServerId(e.target.value);
+                      setServerId(e.target.value.replace(/\D/g, ''));
                       setVerifiedAccount(null);
                     }}
                     placeholder="e.g. 2001"
-                    className="w-full px-3.5 py-2.5 text-sm font-mono font-bold bg-white dark:bg-[#121318] text-[#1D1D1D] dark:text-white border-2 border-[#1D1D1D] dark:border-zinc-700 rounded-xl shadow-[2px_2px_0px_#1D1D1D] dark:shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-[#A8C88A]"
+                    className="w-full px-3.5 py-2.5 text-base sm:text-sm font-mono font-bold bg-white dark:bg-[#121318] text-[#1D1D1D] dark:text-white border-2 border-[#1D1D1D] dark:border-zinc-700 rounded-xl shadow-[2px_2px_0px_#1D1D1D] dark:shadow-[2px_2px_0px_#000] focus:outline-none focus:ring-2 focus:ring-[#A8C88A]"
                   />
                 </div>
               </div>
@@ -337,6 +381,8 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
               {packages.map((pkg) => {
                 const isSelected = selectedPackage.id === pkg.id;
+                const { Icon: PackageIcon, color: packageIconColor } = getPackageVisual(pkg.amount);
+                const pkgImage = pkg.image || getPackageImage(pkg.amount);
                 return (
                   <div
                     key={pkg.id}
@@ -364,7 +410,19 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
                     {/* Icon & Title */}
                     <div className="my-1.5 space-y-1">
                       <div className="w-10 h-10 mx-auto rounded-xl bg-[#E2EFE0] dark:bg-[#20222A] border border-[#1D1D1D] dark:border-zinc-700 flex items-center justify-center shadow-[1px_1px_0px_#1D1D1D]">
-                        <Sparkles className="w-5 h-5 text-[#1D1D1D] dark:text-amber-400" />
+                        <img
+                          src={pkgImage}
+                          alt={`${pkg.amount} package`}
+                          className="w-6 h-6 object-contain"
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            const image = e.currentTarget as HTMLImageElement;
+                            image.style.display = 'none';
+                            const fallback = image.nextElementSibling as HTMLElement | null;
+                            if (fallback) fallback.classList.remove('hidden');
+                          }}
+                        />
+                        <PackageIcon className={`w-5 h-5 ${packageIconColor} hidden`} />
                       </div>
                       <p className="font-extrabold text-xs sm:text-sm text-[#1D1D1D] dark:text-white leading-tight">
                         {pkg.amount}
@@ -422,9 +480,9 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
                           className="w-full h-full object-contain"
                           referrerPolicy="no-referrer"
                           onError={(e) => {
-                            if (pay.fallbackLogo) {
-                              (e.currentTarget as HTMLImageElement).src = pay.fallbackLogo;
-                            }
+                            const img = e.currentTarget as HTMLImageElement;
+                            img.onerror = null;
+                            img.style.visibility = 'hidden';
                           }}
                         />
                       </div>

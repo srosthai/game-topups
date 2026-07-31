@@ -8,8 +8,11 @@ import { TopupGamePage } from './components/sections/TopupGamePage';
 import { AuthModal } from './components/sections/AuthModal';
 import { Footer } from './components/footer/Footer';
 import { LoadingScreen } from './components/common/LoadingScreen';
+import { ScrollToTopButton } from './components/common/ScrollToTopButton';
+import { MarqueeTicker } from './components/common/MarqueeTicker';
 import { Meteors } from './components/ui/meteors';
 import { useGameFilter } from './hooks/useGameFilter';
+import { useSeoMeta } from './hooks/useSeoMeta';
 import { Game } from './types';
 
 export default function App() {
@@ -100,6 +103,15 @@ export default function App() {
 
   const singleSelectedCategory = filters.selectedCategories.length === 1 ? filters.selectedCategories[0] : 'all';
 
+  useSeoMeta(
+    selectedGameForTopup
+      ? `${selectedGameForTopup.name} Top-Up — Instant Delivery`
+      : undefined,
+    selectedGameForTopup
+      ? `Buy ${selectedGameForTopup.name} top-up instantly. Official ${selectedGameForTopup.publisher} partner. Pay with KHQR, ABA or Wing — automatic delivery, 0% fee.`
+      : undefined,
+  );
+
   return (
     <div className={`relative min-h-screen overflow-x-hidden bg-grid-notebook flex flex-col justify-between selection:bg-[#A8C88A] selection:text-[#1D1D1D] ${isDarkMode ? 'dark' : ''} z-0`}>
       <div className="pointer-events-none fixed inset-0 z-0">
@@ -144,12 +156,15 @@ export default function App() {
                   }
                 }}
               />
+
+              {/* Infinite Loop Marquee Ticker */}
+              <MarqueeTicker className="mt-4 sm:mt-5" />
             </div>
 
             {/* Section: Filter + Game Grid Side-By-Side */}
             <div className="flex flex-col lg:flex-row items-start gap-6 sm:gap-8">
               {/* Left Column: Desktop Sticky Sidebar Filter */}
-              <div className="hidden lg:block w-64 xl:w-72 shrink-0 sticky top-28 z-20 self-start max-h-[calc(100vh-122px)] overflow-y-auto no-scrollbar">
+              <div className="hidden lg:block w-64 xl:w-72 shrink-0 sticky top-[88px] z-20 self-start max-h-[calc(100vh-100px)] overflow-y-auto no-scrollbar">
                 <SidebarFilter
                   selectedCategories={filters.selectedCategories}
                   onToggleCategory={toggleCategory}
@@ -184,6 +199,9 @@ export default function App() {
 
       {/* Footer */}
       <Footer onTabChange={setActiveTab} />
+
+      {/* Back to Top Floating Button */}
+      <ScrollToTopButton />
 
       {/* Authentication Modal */}
       <AuthModal

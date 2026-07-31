@@ -1,44 +1,60 @@
-import { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '../../lib/utils';
 
-type MeteorsProps = {
+interface MeteorsProps {
   number?: number;
+  minDelay?: number;
+  maxDelay?: number;
+  minDuration?: number;
+  maxDuration?: number;
+  angle?: number;
   className?: string;
-};
+}
 
-export function Meteors({ number = 18, className }: MeteorsProps) {
-  const meteors = useMemo(
-    () =>
-      Array.from({ length: number }, () => ({
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 95 - 35}%`,
-        animationDelay: `${-(Math.random() * 8 + 1).toFixed(2)}s`,
-        animationDuration: `${6 + Math.random() * 2.5}`,
-        width: 90 + Math.floor(Math.random() * 80),
-        opacity: Number((0.4 + Math.random() * 0.35).toFixed(2)),
-      })),
-    [number],
+export const Meteors = ({
+  number = 20,
+  minDelay = 0.2,
+  maxDelay = 1.2,
+  minDuration = 2,
+  maxDuration = 10,
+  angle = 215,
+  className,
+}: MeteorsProps) => {
+  const [meteorStyles, setMeteorStyles] = useState<Array<React.CSSProperties>>(
+    []
   );
+
+  useEffect(() => {
+    const styles = [...new Array(number)].map(() => ({
+      '--angle': -angle + 'deg',
+      top: `${Math.floor(Math.random() * 100) - 5}%`,
+      left: `calc(0% + ${Math.floor(Math.random() * window.innerWidth)}px)`,
+      animationDelay: Math.random() * (maxDelay - minDelay) + minDelay + 's',
+      animationDuration:
+        Math.floor(Math.random() * (maxDuration - minDuration) + minDuration) +
+        's',
+    }));
+    setMeteorStyles(styles);
+  }, [number, minDelay, maxDelay, minDuration, maxDuration, angle]);
 
   return (
-    <div className={cn('relative h-full w-full overflow-hidden', className)}>
-      <div className="pointer-events-none absolute inset-0 z-0 meteor-bg opacity-90" />
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        {meteors.map((meteor, index) => (
-          <span
-            key={index}
-            className="meteor-drop"
-            style={{
-              left: meteor.left,
-              top: meteor.top,
-              animationDuration: `${meteor.animationDuration}s`,
-              animationDelay: meteor.animationDelay,
-              width: `${meteor.width}px`,
-              opacity: meteor.opacity,
-            }}
-          />
-        ))}
-      </div>
-    </div>
+    <>
+      {[...meteorStyles].map((style, idx) => (
+        // Meteor Head
+        <span
+          key={idx}
+          style={{ ...style }}
+          className={cn(
+            'animate-meteor pointer-events-none absolute size-0.5 rotate-(--angle) rounded-full',
+            'bg-[#1D1D1D]/60 shadow-[0_0_0_1px_#1d1d1d1a]',
+            'dark:bg-zinc-300 dark:shadow-[0_0_0_1px_#ffffff10]',
+            className
+          )}
+        >
+          {/* Meteor Tail */}
+          <div className="pointer-events-none absolute top-1/2 -z-10 h-px w-12.5 -translate-y-1/2 bg-linear-to-r from-[#1D1D1D]/50 to-transparent dark:from-zinc-300/70" />
+        </span>
+      ))}
+    </>
   );
-}
+};
