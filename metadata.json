@@ -1,0 +1,6 @@
+{
+  "name": "Topup Gems",
+  "description": "Modern soft gaming top-up store with categories, platform filters, hero promotional banners, and responsive game grid.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
