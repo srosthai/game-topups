@@ -283,19 +283,9 @@ export const TopupGamePage: React.FC<TopupGamePageProps> = ({ game, onBack }) =>
             <form onSubmit={handleVerifyAccount} className="space-y-3 pt-1">
               <div className="grid grid-cols-12 gap-2.5 sm:gap-3">
                 <div className="col-span-7">
-                  <div className="flex items-center justify-between mb-1">
-                    <label className="block text-xs font-extrabold text-[#1D1D1D] dark:text-zinc-200">
-                      User ID / Player ID <span className="text-red-500">*</span>
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => setIsGuideOpen(true)}
-                      className="inline-flex items-center gap-1 text-[11px] font-black text-[#1D1D1D] dark:text-amber-300 hover:underline cursor-pointer"
-                    >
-                      <Info className="w-3.5 h-3.5 text-[#A8C88A]" />
-                      <span>How to find ID?</span>
-                    </button>
-                  </div>
+                  <label className="block text-xs font-extrabold text-[#1D1D1D] dark:text-zinc-200 mb-1">
+                    User ID / Player ID <span className="text-red-500">*</span>
+                  </label>
                   <input
                     type="text"
                     inputMode="numeric"
