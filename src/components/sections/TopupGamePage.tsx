@@ -23,8 +23,7 @@ import {
   Receipt,
   X,
   AlertCircle,
-  HelpCircle,
-  Info
+  HelpCircle
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 
