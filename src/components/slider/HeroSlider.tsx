@@ -41,9 +41,9 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ onBannerClick }) => {
               <div className="relative w-full h-full min-h-[200px] sm:min-h-[280px] lg:min-h-[320px] flex flex-col md:flex-row items-center justify-between p-4 sm:p-8 lg:p-10 overflow-hidden">
                 <motion.div
                   aria-hidden="true"
-                  className="absolute -left-full top-0 h-full w-2/5 rotate-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-70 pointer-events-none z-10"
-                  initial={{ x: -220 }}
-                  animate={{ x: [ -220, 520 ] }}
+                  className="absolute -left-[40%] top-0 h-full w-2/5 rotate-12 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-70 pointer-events-none z-10"
+                  initial={{ x: '0%' }}
+                  animate={{ x: ['0%', '360%'] }}
                   transition={{
                     duration: 1.5,
                     repeat: Infinity,

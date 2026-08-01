@@ -15,6 +15,19 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
 }) => {
   const [progress, setProgress] = useState(0);
 
+  // Lock page scroll while the loading overlay is visible — the app behind it
+  // is taller than the viewport, so without this the scrollbar shows through.
+  useEffect(() => {
+    if (isLoading) {
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.documentElement.style.overflow = '';
+    };
+  }, [isLoading]);
+
   useEffect(() => {
     if (!isLoading) {
       setProgress(100);
